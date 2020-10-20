@@ -21,6 +21,8 @@ public class ArticleController {
 	@ResponseBody
 	public String doWrite(@RequestParam Map<String, Object> param) {
 		
+		System.out.println("악");
+		
 		System.out.println("param 안에는 무엇이? : " + param);
 		System.out.println("param이 제대로 가지고 오고 있습니다. 이어서 시작하기.");
 		
