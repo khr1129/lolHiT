@@ -5,7 +5,6 @@
 <%@ include file="../part/head.jspf"%>
 
 
-<h1>메인입니다.</h1>
 
 
 

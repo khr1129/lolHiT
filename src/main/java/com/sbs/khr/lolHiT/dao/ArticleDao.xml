@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sbs.khr.lolHiT.dao.ArticleDao">
+	<insert id="write" useGeneratedKeys="true" keyProperty="id">
+		INSERT
+		INTO article
+		<set>
+			regDate = NOW(),
+			updateDate = NOW(),
+			<if test="title != null">title = #{title},</if>
+			<if test="body != null">body = #{body}</if>
+		</set>
+	</insert>
+
+	<select id="getForPrintArticles" resultType="Article">
+		SELECT *
+		FROM article
+		WHERE delStatus = 0
+		ORDER BY id DESC
+	</select>
+
+	<select id="getForPrintArticle" resultType="Article">
+		SELECT *
+		FROM article
+		WHERE id = #{id}
+		AND delStatus = 0
+	</select>
+
+	<update id="modify">
+		UPDATE article
+		<set>
+			updateDate = NOW(),
+			<if test="title != null">title = #{title},</if>
+			<if test="body != null">body = #{body}</if>
+		</set>
+		WHERE id = #{id}
+		AND delStatus = 0
+	</update>
+	
+	<update id="delete">
+	UPDATE article
+	<set>
+		<if test="id != null ">
+			delStatus = 1,
+			delDate = NOW()
+		</if>
+	</set>
+	WHERE id = #{id}
+	AND delStatus = 0
+	</update>
+
+
+
+</mapper>

@@ -4,10 +4,10 @@
 <c:set var="title" value="게시물 작성"/>
 <%@ include file="../part/head.jspf" %>
 
-<h1>${title}</h1>
 
 
-<form action="doWrite" method="POST" onsubmit="writeFormSubmit(this); return false; ">
+
+<form action="doWrite" method="POST" onsubmit="writeFormSubmit(this); return false; " class="con">
 	<div class="form-control-box">
 		<div>제목</div>
 		<input type="text" name="title" placeholder="제목을 입력해주세요."/>
