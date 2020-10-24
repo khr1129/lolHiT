@@ -10,10 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.khr.lolHiT.dto.Article;
+import com.sbs.khr.lolHiT.dto.Member;
 import com.sbs.khr.lolHiT.service.ArticleService;
+import com.sbs.khr.lolHiT.service.MemberService;
 import com.sbs.khr.lolHiT.util.Util;
 
 @Controller
@@ -22,8 +23,16 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 
+	@Autowired
+	private MemberService memberService;
+
 	@RequestMapping("/usr/article/write")
 	public String showWrite(HttpSession session, Model model) {
+		int loginedMemberId = 0;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
 
 		if (session.getAttribute("loginedMemberId") == null) {
 
@@ -53,6 +62,13 @@ public class ArticleController {
 			return "common/redirect";
 		}
 
+		int loginedMemberId = 0;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+
+		param.put("memberId", loginedMemberId);
 		int newArticleId = articleService.write(param);
 
 		model.addAttribute("msg", newArticleId + "번 게시물이 작성되었습니다.");
@@ -83,14 +99,36 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/modify")
 	public String showModify(Model model, int id, HttpSession session) {
+		
+		int loginedMemberId = 0;
 
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+		
+		Member member = memberService.getMemberById(loginedMemberId);
+
+		Article article = articleService.getForPrintArticle(id);
+
+		
+		if (article.getMemberId() != member.getId()) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+		
 		if (session.getAttribute("loginedMemberId") == null) {
 			model.addAttribute("msg", "로그인 후 이용바랍니다.");
 			model.addAttribute("replaceUri", "../member/login");
 			return "common/redirect";
 		}
 
-		Article article = articleService.getForPrintArticle(id);
+		
+
+	
+		
+		
+		
 
 		model.addAttribute("article", article);
 
@@ -99,13 +137,29 @@ public class ArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	public String doModify(@RequestParam Map<String, Object> param, HttpSession session, Model model) {
-
+		
+		int id = Util.getAsInt(param.get("id"));
+		
 		if (param.isEmpty()) {
 			model.addAttribute("msg", "게시물을 다시 작성바랍니다.");
 			model.addAttribute("replaceUri", "../article/list");
 			return "common/redirect";
 		}
 
+		int loginedMemberId = 0;
+		
+		Article article = articleService.getForPrintArticle(id);
+		Member member = memberService.getMemberById(loginedMemberId);
+
+		if (article.getId() != member.getId()) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+		
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int)session.getAttribute("loginedMemberId");
+		}
 		if (session.getAttribute("loginedMemberId") == null) {
 
 			model.addAttribute("msg", "로그인 후 이용바랍니다.");
@@ -114,13 +168,15 @@ public class ArticleController {
 			return "common/redirect";
 		}
 
+		
+
 		articleService.modify(param);
 
-		int id = Util.getAsInt(param.get("id"));
 		
+
 		model.addAttribute("msg", id + "번 게시물을 수정했습니다.");
 		model.addAttribute("replaceUri", "../article/detail?id=" + id);
-		
+
 		return "common/redirect";
 
 	}
@@ -128,6 +184,12 @@ public class ArticleController {
 	@RequestMapping("/usr/article/doDelete")
 	public String doDelete(int id, HttpSession session, Model model) {
 		
+		int loginedMemberId = 0;
+		
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int)session.getAttribute("loginedMemberId");
+		}
+
 		if (session.getAttribute("loginedMemberId") == null) {
 
 			model.addAttribute("msg", "로그인 후 이용바랍니다.");
@@ -136,11 +198,21 @@ public class ArticleController {
 			return "common/redirect";
 		}
 		
+		Article article = articleService.getForPrintArticle(id);
+		Member member = memberService.getMemberById(loginedMemberId);
+		
+		if ( article.getMemberId() != member.getId() ) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			return "common/redirect";
+		}
+
 		articleService.delete(id);
 		
+
 		model.addAttribute("msg", id + "번 게시물을 삭제했습니다.");
 		model.addAttribute("replaceUri", "../article/list");
-		
+
 		return "common/redirect";
 	}
 

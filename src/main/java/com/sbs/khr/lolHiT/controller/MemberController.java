@@ -79,6 +79,9 @@ public class MemberController {
 			session.removeAttribute("loginedMemberId");
 			return "<script> location.replace('../home/main'); </script>";
 		}
+		else {
+			
+		}
 		return "";
 	}
 }

@@ -36,6 +36,7 @@ public class MemberService {
 	public int getValidLoginIdByLoginId(Map<String, Object> param) {
 		return memberDao.getValidLoginIdByLoginId(param);
 	}
+
 	
 	
 }
