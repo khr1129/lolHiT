@@ -18,14 +18,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Autowired
 	@Qualifier("beforeActionInterceptor")
 	HandlerInterceptor beforeActionInterceptor;
-
+	
 	/*
-	 * @Autowired
-	 * 
-	 * @Qualifier("needToLoginInterceptor") HandlerInterceptor
-	 * needToLoginInterceptor;
-	 * 
-	 */
+	@Autowired
+	@Qualifier("needToLoginInterceptor")
+	HandlerInterceptor needToLoginInterceptor;
+	*/
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// beforActionInterceptor가 모든 액션이 실행 되기 전에 실행되도록 처리
@@ -33,12 +32,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 		// 로그인 없이도 접속할 수 있는 URI를 전부 기술
 		/*
-		 * registry.addInterceptor(needToLoginInterceptor).addPathPatterns("/**").
-		 * excludePathPatterns("/")
-		 * .excludePathPatterns("/usr/home/main").excludePathPatterns(
-		 * "/usr/article/list") .excludePathPatterns("/usr/article/detail");
-		 */
-
+		registry.addInterceptor(needToLoginInterceptor).addPathPatterns("/**").excludePathPatterns("/")
+				.excludePathPatterns("/usr/home/main").excludePathPatterns("/usr/article/list")
+				.excludePathPatterns("/usr/article/detail").excludePathPatterns("/error");
+		*/
+		
+		
 	}
 
 }

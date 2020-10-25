@@ -99,6 +99,10 @@ public class MemberController {
 		
 		param.put("id", loginedMemberId);
 		
+		/* 
+		해커가 장난을 칠 수 있으니, 회원정보를 수정하기 위해 필요한 회원의 id, name을 제외하고는 제거해준다.
+		회원의 아이디, 비번을 본인외에 다른 사람은 변경할 수 있으면 안되니까.   
+		*/
 		param.remove("loginId");
 		param.remove("loginPw");
 		
