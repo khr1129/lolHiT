@@ -42,3 +42,24 @@ CREATE TABLE `member` (
 
 SELECT *
 FROM `member`;
+
+# article 테이블에 memberId 칼럼 다시 추가 
+ALTER TABLE article ADD memberId INT(10) UNSIGNED NOT NULL; 
+
+
+
+UPDATE article
+SET memberId = 1
+WHERE memberId = 0;
+
+
+SELECT *
+FROM article;
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'admin2',
+loginPw = 'admin2',
+`name` = 'admin2',
+email = 'admin2@admin.com';

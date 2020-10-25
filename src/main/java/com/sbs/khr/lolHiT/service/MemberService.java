@@ -37,6 +37,10 @@ public class MemberService {
 		return memberDao.getValidLoginIdByLoginId(param);
 	}
 
+	public void modify(Map<String, Object> param) {
+		memberDao.modify(param);
+	}
+
 	
 	
 }

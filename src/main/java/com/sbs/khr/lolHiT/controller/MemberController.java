@@ -2,10 +2,12 @@ package com.sbs.khr.lolHiT.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,8 +30,6 @@ public class MemberController {
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
 	public String doJoin(@RequestParam Map<String, Object> param) {
-		
-		System.out.println("param 소환 : " + param);
 		
 		int newMemberId = memberService.join(param);
 		
@@ -84,4 +84,32 @@ public class MemberController {
 		}
 		return "";
 	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showModify(HttpServletRequest req, Model model) {
+		
+		return "usr/member/modify";
+		
+	}
+	
+	@RequestMapping("/usr/member/doModify")
+	public String doModify(@RequestParam Map<String, Object> param, Model model, HttpServletRequest req) {
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
+		param.put("id", loginedMemberId);
+		
+		param.remove("loginId");
+		param.remove("loginPw");
+		
+		
+		memberService.modify(param);
+		
+		model.addAttribute("msg", "이름이 수정되었습니다.");
+		model.addAttribute("replaceUri", "../home/main");
+		
+		return "common/redirect";
+	}
+	
+	
 }
