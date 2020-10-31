@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.sbs.khr.lolHiT.dto.Article;
+import com.sbs.khr.lolHiT.dto.Reply;
 
 @Mapper
 public interface ArticleDao {
@@ -20,5 +21,9 @@ public interface ArticleDao {
 	void modify(Map<String, Object> param);
 
 	void delete(@Param("id") int id);
+
+	void writeReply(Map<String, Object> param);
+
+	List<Reply> getForPrintReplies(@Param("memberId") int memberId, @Param("id") int id);
 	
 }

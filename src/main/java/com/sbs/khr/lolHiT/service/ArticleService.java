@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sbs.khr.lolHiT.dao.ArticleDao;
 import com.sbs.khr.lolHiT.dto.Article;
+import com.sbs.khr.lolHiT.dto.Reply;
 import com.sbs.khr.lolHiT.util.Util;
 
 @Service
@@ -39,5 +40,18 @@ public class ArticleService {
 	public void delete(int id) {
 		articleDao.delete(id);
 	}
+
+	public int writeReply(Map<String, Object> param) {
+		articleDao.writeReply(param);
+		
+		int id = Util.getAsInt(param.get("id")); 
+		
+		return id;
+	}
+
+	public List<Reply> getForPrintReplies(int memberId, int id) {
+		return articleDao.getForPrintReplies(memberId, id);
+	}
+
 	
 }

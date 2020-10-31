@@ -63,3 +63,18 @@ loginId = 'admin2',
 loginPw = 'admin2',
 `name` = 'admin2',
 email = 'admin2@admin.com';
+
+
+# 댓글 테이블 생성 
+CREATE TABLE reply (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    articleId INT(10) UNSIGNED NOT NULL,
+    memberId INT(10) UNSIGNED NOT NULL,
+    `body` CHAR(100)
+);
+
+
+SELECT *
+FROM reply;

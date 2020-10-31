@@ -3,6 +3,7 @@ package com.sbs.khr.lolHiT.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbs.khr.lolHiT.dto.Article;
 import com.sbs.khr.lolHiT.dto.Member;
+import com.sbs.khr.lolHiT.dto.Reply;
 import com.sbs.khr.lolHiT.service.ArticleService;
 import com.sbs.khr.lolHiT.service.MemberService;
 import com.sbs.khr.lolHiT.util.Util;
@@ -88,11 +90,16 @@ public class ArticleController {
 	}
 
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(int id, Model model) {
+	public String showDetail(int id, Model model, HttpServletRequest req) {
 
 		Article article = articleService.getForPrintArticle(id);
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
+		List<Reply> replies = articleService.getForPrintReplies(loginedMemberId, article.getId());
 
 		model.addAttribute("article", article);
+		model.addAttribute("replies", replies);
 
 		return "usr/article/detail";
 	}
@@ -213,6 +220,18 @@ public class ArticleController {
 		model.addAttribute("msg", id + "번 게시물을 삭제했습니다.");
 		model.addAttribute("replaceUri", "../article/list");
 
+		return "common/redirect";
+	}
+	
+	@RequestMapping("/usr/article/doWriteReply")
+	public String doWriteReply(@RequestParam Map<String, Object> param, Model model) {
+		
+		int newReplyId = articleService.writeReply(param);
+		int articleId = Util.getAsInt(param.get("articleId"));
+		
+		model.addAttribute("msg", String.format("%d번 댓글이 생성되었습니다.", newReplyId));
+		model.addAttribute("replaceUri", String.format("../article/detail?id=%d", articleId));
+		
 		return "common/redirect";
 	}
 

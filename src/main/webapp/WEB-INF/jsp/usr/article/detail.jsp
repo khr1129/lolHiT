@@ -14,9 +14,66 @@
 		<button type="button" onclick="location.replace('../article/list')">리스트</button>
 		<button type="button" onclick="location.replace('../article/modify?id=${article.id}');" >수정</button>
 		<button type="button" onclick="if(confirm('삭제하시겠습니까?') == false ) return false; location.replace('../article/doDelete?id=${article.id}')">삭제</button>
-		
 		</div>
 </div>
+
+<form action="doWriteReply" method="POST" onsubmit="WriteReplyFormSubmit(this); return false;" class="con form">
+	<input type="hidden" name="articleId" value="${article.id }"/>
+	<input type="hidden" name="memberId" value="${loginedMemberId}" />
+	<div class="form-control-box">
+		<textarea name="body" placeholder="댓글을 입력해주세요." maxlength="1000" ></textarea>
+	</div>
+	<div class="btn-box">
+		<button type="submit">작성</button>
+	</div>
+</form>
+
+
+<div class="reply-list-box con margin-top-50">
+	<c:forEach items="${replies }" var="reply">
+		<div class="list-box-content margin-top-10">
+			<div class="article-content">
+				<div>번호 : ${reply.id}</div>
+				<div>작성일 : ${reply.regDate }</div>
+				<div>수정일 : ${reply.updateDate }</div>
+				<%-- <div>작성자 : ${reply.extra.writer}</div> --%>
+				<div>
+					댓글 : ${reply.body } 
+				</div>
+			</div>
+			<div class="btn-box">
+				<button type="button" onclick="location.replace('../article/modifyReply?id=${reply.id}')">수정</button>
+				<button type="button" onclick="if ( confirm('삭제하시겠습니까?') == false )  return false;  location.replace('../article/doDeleteReply?id=${reply.id}')">삭제</button>
+			</div>
+		</div>
+		<div class="border-gray-2 margin-top-10"></div>
+	</c:forEach>
+
+</div>
+
+<script>
+
+var WriteReplyFormSubmitDone = false;
+function WriteReplyFormSubmit(form) {
+	if ( WriteReplyFormSubmitDone ) {
+		alert('처리중입니다.');
+		return;
+	}
+
+	form.body.value = form.body.value.trim();
+	if ( form.body.value.length == 0 ) {
+		alert('댓글을 입력해주세요.');
+		form.body.focus();
+		return;
+	}
+
+	form.submit();
+	WriteReplyFormSubmitDone = true;
+}
+</script>
+
+
+
 
 
 
