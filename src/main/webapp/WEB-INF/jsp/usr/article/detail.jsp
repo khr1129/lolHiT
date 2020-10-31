@@ -17,11 +17,12 @@
 		</div>
 </div>
 
+<h2 class="con margin-top-100">댓글 작성</h2>
 <form action="doWriteReply" method="POST" onsubmit="WriteReplyFormSubmit(this); return false;" class="con form">
 	<input type="hidden" name="articleId" value="${article.id }"/>
 	<input type="hidden" name="memberId" value="${loginedMemberId}" />
 	<div class="form-control-box">
-		<textarea name="body" placeholder="댓글을 입력해주세요." maxlength="1000" ></textarea>
+		<textarea name="body" rows="10" placeholder="댓글을 입력해주세요." ></textarea>
 	</div>
 	<div class="btn-box">
 		<button type="submit">작성</button>
@@ -29,6 +30,7 @@
 </form>
 
 
+<h2 class="con margin-top-50">댓글 리스팅</h2>
 <div class="reply-list-box con margin-top-50">
 	<c:forEach items="${replies }" var="reply">
 		<div class="list-box-content margin-top-10">
@@ -36,7 +38,7 @@
 				<div>번호 : ${reply.id}</div>
 				<div>작성일 : ${reply.regDate }</div>
 				<div>수정일 : ${reply.updateDate }</div>
-				<%-- <div>작성자 : ${reply.extra.writer}</div> --%>
+				<div style="font-weight: bold;">작성자 : ${reply.extra.writer}</div>
 				<div>
 					댓글 : ${reply.body } 
 				</div>
